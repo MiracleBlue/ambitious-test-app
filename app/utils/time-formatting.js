@@ -13,30 +13,28 @@ export function isValid24HourTime(time) {
   return isValidTime;
 }
 
+export function getDayPeriod(hours) {
+  if (hours >= 12) return 'pm';
+  return 'am';
+}
+
+export function convertHoursTo12(hours) {
+  if (hours > 12) return hours - 12;
+  return hours;
+}
+
 // input 2310 -> output 11:10 pm
 // input 0930 -> 9:30 am
 export function convertTimeTo12({timeIn24, capitals}) {
-  let suffix = 'am';
-  let hours = parseInt(timeIn24.slice(0, 2));
+  const hoursIn24 = parseInt(timeIn24.slice(0, 2));
+
+  const hours = convertHoursTo12(hoursIn24);
   const minutes = timeIn24.slice(2, 4);
+  const period = getDayPeriod(hoursIn24);
 
-  if (hours >= 12) suffix = 'pm';
-
-  if (hours > 12) hours = hours - 12;
-
-  const timeIn12 = `${hours}:${minutes} ${suffix}`;
+  const timeIn12 = `${hours}:${minutes} ${period}`;
 
   if (capitals) return timeIn12.toUpperCase();
 
   return timeIn12;
 }
-
-export default Ember.Helper.extend({
-  compute([timeIn24], {capitals}) {
-    if (!isValid24HourTime(timeIn24)) return null;
-
-    const timeIn12 = convertTimeTo12({timeIn24, capitals});
-
-    return timeIn12;
-  }
-});
