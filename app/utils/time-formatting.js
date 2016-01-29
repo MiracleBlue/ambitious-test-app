@@ -19,6 +19,7 @@ export function getDayPeriod(hours) {
 }
 
 export function convertHoursTo12(hours) {
+  if (hours == 0) return 12;
   if (hours > 12) return hours - 12;
   return hours;
 }
